@@ -1,0 +1,94 @@
+syntax="proto3";
+package com.smiles.server.controller;
+
+option java_package = "com.smiles.server";
+option java_multiple_files=true;
+import "google/protobuf/struct.proto";
+
+message ExecEnv{
+  optional string CalcBy = 1;
+  optional double JobCPURunTime = 2;
+  optional string CalcMachine = 3;
+  optional int32 ActualJobRunTime = 4;
+  optional string FinTime = 5;
+  optional int32 Memory = 6;
+  optional string NProcShared = 7;
+}
+
+message CalcProperties{
+  repeated int32 Homos = 1 [packed=true];
+  optional string Energy = 2;
+  optional string Dipole = 3;
+  optional string HF = 4;
+  repeated double MaximumGradientDistribution = 5 [packed=true];
+  repeated double RMSGradientDistribution = 6 [packed=true];
+  repeated double Iterations = 7 [packed=true];
+}
+
+message FMStructuralFormats{
+  optional string SDF = 1;
+  optional string PDB = 2;
+}
+
+message Mol{
+  optional string Formula = 1;
+  optional int32 NAtom = 2;
+  optional string Multiplicity = 3;
+  optional string Charge = 4;
+  optional string OrbSym = 5;
+  optional string ElecSym = 6;
+}
+
+message CalcField{
+  optional string JobStatus = 1;
+  optional string Basis = 2;
+  optional int32 NMO = 3;
+  optional string Keywords = 4;
+  optional int32 NBasis = 5;
+  repeated double MoEnergies = 6 [packed=true];
+  optional string Package = 7;
+  optional string CalcType = 8;
+  optional string Methods = 9;
+}
+
+message IdentifiersField{
+  optional string InChiKey = 1;
+  optional string CanonicalSMILES = 2;
+  optional string InChi = 3;
+  optional string SMILES = 4;
+}
+
+message FilesField{
+  optional string SMILESFile = 1;
+  optional string SDFStructureFile = 2;
+  optional string GaussianOutputFile = 3;
+  optional string GaussianInputFile = 4;
+  optional string PDBStructureFile = 5;
+  optional string InChIFile = 6;
+}
+
+message InputFileConfigurationField{
+  optional string Link0Commands = 1;
+  optional string RouteCommands = 2;
+}
+message GridChem{
+  optional string ProjectName = 1;
+  optional string ExperimentName = 2;
+  optional string Username = 3;
+  optional string Id = 4;
+  optional int32 IndexedTime = 10;
+  ExecEnv ExecutionEnvironment = 5;
+  CalcProperties CalculatedProperties = 6;
+  FMStructuralFormats FinalMoleculeStructuralFormats = 7;
+  Mol Molecule = 8;
+  CalcField Calculation = 9;
+  IdentifiersField Identifiers = 11;
+  FilesField Files = 12;
+  InputFileConfigurationField InputFileConfiguration = 13;
+}
+
+message GetGridChemRequest{};
+
+service GridChemService{
+  rpc GetData(GetGridChemRequest) returns (google.protobuf.Struct){};
+}

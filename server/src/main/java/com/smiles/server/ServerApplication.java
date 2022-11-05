@@ -19,6 +19,7 @@ public class ServerApplication {
         Server server = ServerBuilder
             .forPort(localport)
             .addService(new MoleculeImpl())
+            .addService(new DataCatImpl())
             .build();
         server.start();
 

@@ -9,7 +9,7 @@ import com.mongodb.client.MongoDatabase;
 import com.smiles.server.GetGridChemRequest;
 import com.smiles.server.GridChemServiceGrpc;
 import com.mongodb.client.MongoClient;
-import com.smiles.server.utils.StreamJsonData;
+import com.smiles.server.utils.StreamGridChemJsonData;
 import io.grpc.stub.StreamObserver;
 import org.bson.Document;
 
@@ -32,7 +32,7 @@ public class DataCatImpl extends GridChemServiceGrpc.GridChemServiceImplBase {
         Struct.Builder gridChemstructBuilder = Struct.newBuilder();
         try {
             JsonFormat.parser()
-                    .merge(StreamJsonData.of(listOfGridChemRecords).toJsonString(), gridChemstructBuilder);
+                    .merge(StreamGridChemJsonData.of(listOfGridChemRecords).toJsonString(), gridChemstructBuilder);
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }

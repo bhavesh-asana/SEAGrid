@@ -9,7 +9,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.smiles.server.GetMoleculeRequest;
 import com.smiles.server.MoleculeServiceGrpc;
-import com.smiles.server.utils.StreamJsonData;
+import com.smiles.server.utils.StreamMoleculeJsonData;
 import io.grpc.stub.StreamObserver;
 import org.bson.Document;
 
@@ -31,7 +31,7 @@ public class MoleculeImpl extends MoleculeServiceGrpc.MoleculeServiceImplBase {
         Struct.Builder structBuilder = Struct.newBuilder();
         try {
             JsonFormat.parser()
-                .merge(StreamJsonData.of(listOfMoleculeRecords).toJsonString(), structBuilder);
+                .merge(StreamMoleculeJsonData.of(listOfMoleculeRecords).toJsonString(), structBuilder);
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }

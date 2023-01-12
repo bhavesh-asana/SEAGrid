@@ -1,14 +1,13 @@
 <template>
     <div>
-        <AppHeader/>
+        <AppHeader />
         <div class="filter-container">
             <b-col class="my-1" lg="6">
                 <b-form-group class="mb-0" label="Filter" label-align-sm="right" label-cols-sm="3"
-                              label-for="filter-input" label-size="sm">
+                    label-for="filter-input" label-size="sm">
                     <b-input-group size="sm">
                         <b-form-input id="filter-input" v-model="filter" placeholder="Type to Search"
-                                      type="search"></b-form-input>
-
+                            type="search"></b-form-input>
                         <b-input-group-append>
                             <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
                         </b-input-group-append>
@@ -16,21 +15,14 @@
                 </b-form-group>
             </b-col>
             <b-col class="my-1" lg="6">
-                <b-form-group
-                        v-slot="{ ariaDescribedby }"
-                        v-model="sortDirection"
-                        class="mb-0"
-                        description="Leave all unchecked to filter on all data"
-                        label="Filter On"
-                        label-align-sm="right"
-                        label-cols-sm="3"
-                        label-size="sm"
-                >
+                <b-form-group v-slot="{ ariaDescribedby }" v-model="sortDirection" class="mb-0"
+                    description="Leave all unchecked to filter on all data" label="Filter On" label-align-sm="right"
+                    label-cols-sm="3" label-size="sm">
                     <b-form-checkbox-group v-model="filterOn" :aria-describedby="ariaDescribedby" class="mt-1">
                         <b-form-checkbox value="molecule_name">Molecule Name</b-form-checkbox>
                         <b-form-checkbox value="absorb">Absorb</b-form-checkbox>
                         <b-form-checkbox value="year_publ">Year of Publication</b-form-checkbox>
-                        <br/>
+                        <br />
                         <b-form-checkbox value="lifetime">Life Time</b-form-checkbox>
                         <b-form-checkbox value="comp_class">Compound Class</b-form-checkbox>
                     </b-form-checkbox-group>
@@ -38,24 +30,52 @@
             </b-col>
         </div>
 
+        <!-- New Filter Container -->
+        <div class="filter-container">
+            <strong>New Data Filter</strong>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <b-button variant="primary">AND</b-button>
+                            <b-button variant="primary">OR</b-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b-form-select v-model="propertyNameselected" :options="propertyName"></b-form-select>
+                        </td>
+                        <td>
+                            <b-form-select v-model="propertyInstanceselected" :options="propertyInstance"></b-form-select>
+                        </td>
+                        <td>
+                            <b-form-input v-model="inputField" placeholder="Enter option" required></b-form-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b-button variant="primary">Search</b-button>
+                            <b-button variant="danger">Delete</b-button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="mt-3">Selected: <strong>{{ propertyNameselected }}, {{ propertyInstanceselected }}</strong></div>
+            </div>
+        </div>
+        <!-- End of New Filter Container -->
+
+        <!-- Table Property - 2 -->
+
+        <!-- End of Table Property - 2 -->
 
         <div class="table-container justify-content-md-center table-bordered table-hover">
-            <b-table
-                    id="my-table"
-                    :current-page="currentPage"
-                    :fields="fields"
-                    :filter="filter"
-                    :filter-included-fields="filterOn"
-                    :items="items"
-                    :per-page="perPage"
-                    caption-top
-                    responsive
-                    small
-            >
+            <b-table id="my-table" :current-page="currentPage" :fields="fields" :filter="filter"
+                :filter-included-fields="filterOn" :items="items" :per-page="perPage" caption-top responsive small>
                 <template #table-caption>
                     <p id="table-caption">
-                        <strong>Total No.of Records found in Experimental Database: {{ rows }}</strong>
-                        <br/>
+                        <strong>Total No.of Records found in Experimental Database:
+                            {{ rows }}</strong>
+                        <br />
                         <strong>Filtered Results: {{ filteredItems }}</strong>
                     </p>
                 </template>
@@ -65,49 +85,24 @@
             </b-table>
         </div>
         <b-pagination v-model="currentPage" :per-page="perPage" :total-rows="rows" align="right"
-                      aria-controls="my-table" class="pagination"/>
+            aria-controls="my-table" class="pagination" />
 
-        <!-- <div>
-      <account-info :fields="fields" />
-    </div> -->
     </div>
 </template>
 
 <script>
-import AppHeader from "@/components/AppHeader";
+// import AppHeader from "@/components/AppHeader";
 import axios from "axios";
 import DataSheet from "@/pages/DataSheet";
 import AccountInfo from "@/pages/AccountInfo";
+// import DataTable from './DataTable.vue';
 
 export default {
     name: "SearchPage",
     // eslint-disable-next-line vue/no-unused-components
-    components: {AccountInfo, DataSheet, AppHeader},
+    components: { AccountInfo, DataSheet },
     data() {
         return {
-            input1: "",
-            input1state: null,
-            input2: "",
-            input2state: null,
-            options: [{text: "- Choose 1 -", value: ""}, "Molecule Name", "Emperical Formula", "Year of Publication"],
-            input1Return: "",
-            input2Return: "",
-            popoverShow: false,
-
-            dataMsg: "From Master",
-            perPage: 15,
-            currentPage: 1,
-            displayCategory: false,
-            selected: "vghjv",
-            sub_drop: "",
-            subDrop: [],
-            selectedFilter: {},
-            sub_drop_values: {
-                rdb: [{key: "less"}, {key: "greater"}, {key: "equals"}],
-
-                absorb: [{key: "less"}],
-            },
-
             fields: [
                 {
                     key: "molecule_id",
@@ -120,7 +115,6 @@ export default {
                 {
                     key: "jour_cit",
                 },
-
                 {
                     key: "mw_source",
                     sortable: true,
@@ -145,6 +139,19 @@ export default {
             items: [],
             filter: null,
             filterOn: [],
+            perPage: 15,
+            currentPage: 1,
+            displayCategory: false,
+            propertyNameselected: null,
+            propertyInstanceselected: null,
+            propertyName: [
+                { value: 'molecule_name', text: "Molecule Name" },
+                { value: 'absorb', text: "Absorb"}
+            ],
+            propertyInstance: [
+                { value: 'lessthan', text: 'Lessthan' },
+                { value: 'greaterthan', text: 'Greaterthan'}
+            ]
         };
     },
 
@@ -157,16 +164,7 @@ export default {
         }
     },
     watch: {
-        input1(val) {
-            if (val) {
-                this.input1state = true;
-            }
-        },
-        input2(val) {
-            if (val) {
-                this.input2state = true;
-            }
-        },
+
     },
     computed: {
         rows() {

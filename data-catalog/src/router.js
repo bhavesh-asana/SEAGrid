@@ -2,9 +2,9 @@ import Vue from "vue";
 import Router from "vue-router";
 import HomePage from "@/pages/HomePage";
 import SearchPage from "@/pages/SearchPage";
-import DirectoryPage from "@/pages/DirectoryPage";
 import LoginPage from "@/pages/LoginPage";
 import CallBack from "@/components/CallBack";
+import UserAuth from "@/components/UserAuth";
 
 Vue.use(Router)
 
@@ -37,9 +37,9 @@ export default new Router({
         },
 
         {
-            path: "/directory",
-            name: "directory",
-            component: DirectoryPage
+            path: "/auth",
+            name: "userAuth",
+            component: UserAuth
         }
     ]
 })

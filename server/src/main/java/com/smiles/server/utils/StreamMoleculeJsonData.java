@@ -15,7 +15,7 @@ public class StreamMoleculeJsonData {
     public static StreamMoleculeJsonData of(List<Document> listOfMoleculeRecords){
         return new StreamMoleculeJsonData(listOfMoleculeRecords);
     }
-
+ 
     public String toJsonString(){
         return listOfMoleculeRecords
             .stream()

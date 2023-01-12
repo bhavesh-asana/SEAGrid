@@ -1,0 +1,87 @@
+syntax="proto3";
+package com.smiles.controller;
+import "google/protobuf/struct.proto";
+
+message Biblio{
+  optional string doi = 2;
+  optional string published_date = 3;
+  optional string title = 4;
+}
+message peaks{
+  optional string unit = 1;
+  optional string value = 2;
+  optional string value_validation_failed = 3;
+}
+message emison_spectra{
+  optional peaks peaks = 1;
+}
+message uvvis_spectra{
+  optional string apparatus = 1;
+  optional peaks peaks = 2;
+  optional string solvent = 3;
+  optional string temperature = 4;
+  optional string temperature_units = 5;
+}
+message Records{
+  optional emison_spectra emi_spectra = 1;
+  optional string names = 2;
+  optional string smiles = 3;
+  optional string smiles_validation_failed = 4;
+  optional uvvis_spectra uv_spectra = 5;
+}
+
+message Molecule {
+  optional string id = 1;
+  Biblio biblio = 2;
+  Records record = 3;
+}
+
+message CreateMoleculeRequest{
+  Molecule molecule = 1;
+}
+message CreateMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+message ReadMoleculeRequest{
+  string id = 1;
+}
+message ReadMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+message UpdateMoleculeRequest{
+  Molecule molecule = 1;
+}
+message UpdateMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+message DeleteMoleculeRequest{
+  string molecule_id = 1;
+}
+message DeleteMoleculeResponse{
+  string molecule_id = 1;
+}
+
+message ListMoleculeRequest{
+}
+
+message ListMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+message GetMoleculeRequest{
+  
+}
+
+service MoleculeService{
+  rpc CreateMolecule(CreateMoleculeRequest) returns (CreateMoleculeResponse){};
+  rpc ReadMolecule(ReadMoleculeRequest) returns (ReadMoleculeResponse){};
+  rpc UpdateMolecule(UpdateMoleculeRequest) returns (UpdateMoleculeResponse){};
+  rpc DeleteMolecule(DeleteMoleculeRequest) returns (DeleteMoleculeResponse){};
+  rpc ListMolecule(ListMoleculeRequest) returns (ListMoleculeResponse){};
+  rpc GetMolecule(GetMoleculeRequest) returns (google.protobuf.Struct){};
+}
+
+//  python -m grpc_tools.protoc --proto_path=./ --python_out=./ --grpc_python_out=./ ./ChemDataExtract.proto

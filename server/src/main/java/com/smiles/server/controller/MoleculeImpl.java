@@ -7,6 +7,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.smiles.server.CreateMoleculeRequest;
+import com.smiles.server.CreateMoleculeResponse;
 import com.smiles.server.GetMoleculeRequest;
 import com.smiles.server.MoleculeServiceGrpc;
 import com.smiles.server.utils.StreamMoleculeJsonData;
@@ -25,6 +27,11 @@ public class MoleculeImpl extends MoleculeServiceGrpc.MoleculeServiceImplBase {
     MongoCollection<Document> dataCursor = dbCursor.getCollection(collectionName);
 
     List<Document> listOfMoleculeRecords = dataCursor.find().into(new ArrayList<>());
+
+    @Override
+    public void createMolecule(CreateMoleculeRequest request, StreamObserver<CreateMoleculeResponse> responseObserver) {
+        super.createMolecule(request, responseObserver);
+    }
 
     @Override
     public void getMolecule(GetMoleculeRequest request, StreamObserver<Struct> responseObserver) {
